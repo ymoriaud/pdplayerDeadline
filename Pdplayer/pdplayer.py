@@ -22,6 +22,8 @@ class pdplayerPlugin (DeadlinePlugin):
     ## Hook up the callbacks in the constructor.
     def __init__( self ):
         self.InitializeProcessCallback += self.InitializeProcess
+		self.RenderExecutableCallback += self.RenderExecutable
+        self.RenderArgumentCallback += self.RenderArgument
 
     ## Clean up the plugin.
     def Cleanup():
@@ -32,3 +34,13 @@ class pdplayerPlugin (DeadlinePlugin):
         # Set the plugin specific settings.
         self.SingleFramesOnly = False
         self.PluginType = PluginType.Simple
+		
+	 ## Callback to get the executable used for rendering.
+    def RenderExecutable( self ):
+        return self.GetConfigEntry( "PdplayerExecutable" )
+		
+	 ## Callback to get the arguments that will be passed to the executable.
+    def RenderArgument( self ):
+        arguments += " -start " + str(self.GetStartFrame()) + " -end " + str(self.GetEndFrame())
+        arguments += " -scene \"" + self.GetDataFilename() + "\""
+        return arguments

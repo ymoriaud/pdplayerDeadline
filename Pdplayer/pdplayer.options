@@ -1,7 +1,45 @@
-[Verbose]
-Type=boolean
-Label=Verbose Logging
-Description=If verbose logging is enabled.
+[Counter]
+Type=Enum
+Values=Frame;Timecode
+Label=Counter type:
+Description=Set counter type.
+Required=false
+DefaultValue=Frame
+
+[FPS]
+Type=Float
+Label=FPS:
+Description=Set the FPS value
+Default=25
+
+[Template]
+Type=filename
+Label=Pdplayer template:
+Description=Get the template file for render the job.
 Required=true
-DisableIfBlank=false
-DefaultValue=True
+
+[FileExtension]
+Type=Enum
+Label=File extension:
+Values=AVI File;Quicktime File;Png Sequence;TGA Sequence
+Description=Set the file extension for the job.
+
+[Codec]
+Type=Enum
+Label=Codec:
+Description=Set the codec for the job.
+
+[Quality]
+Type=Integer
+Minimum=1
+Maximum=100
+Default=100
+Label=Quality:
+Description=Set the quality of the render.
+
+[Target]
+Type=Enum
+Values=Windows;Mac
+Label=Target:
+Description=Set the target.
+Default=Windows
