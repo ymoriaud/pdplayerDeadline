@@ -1,1 +1,4 @@
-# pdplayerDeadline
+Pdplayer submitter for Deadline
+--
+
+Tool in development...
