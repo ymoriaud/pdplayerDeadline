@@ -1,0 +1,7 @@
+[Verbose]
+Type=boolean
+Label=Verbose Logging
+Description=If verbose logging is enabled.
+Required=true
+DisableIfBlank=false
+DefaultValue=True

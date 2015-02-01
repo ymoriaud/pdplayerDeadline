@@ -1,0 +1,6 @@
+[PdplayerExecutable]
+Type=filename
+Label=PdPlayer executable location
+Description=The path to the executable file used for rendering.
+Default=C:\Program Files\Pdplayer 64\pdplayer64.exe
+Required=true
