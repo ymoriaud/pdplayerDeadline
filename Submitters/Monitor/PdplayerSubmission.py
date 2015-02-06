@@ -113,8 +113,8 @@ def SubmitButtonPressed(*args):
     if( not File.Exists( sceneFile ) ):
         scriptDialog.ShowMessageBox( "The sceen {0} does not exist".format(sceneFile), "Error" )
         return
-    elif (not scriptDialog.GetValue("SubmitSceneBox") and PathUtils.IsPathLocal(sceneFile)):
-        result = scriptDialog.ShowMessageBox( "The scene file %s is local. Are you sure you want to continue?" % sceneFile, "Warning", ("Yes","No") )
+    elif (PathUtils.IsPathLocal(sceneFile)):
+        result = scriptDialog.ShowMessageBox( "The scene file {0} is local. Are you sure you want to continue?".format(sceneFile), "Warning", ("Yes","No") )
         if(result=="No"):
             return
     
@@ -150,13 +150,9 @@ def SubmitButtonPressed(*args):
         writer.WriteLine( "InitialStatus=Suspended" )
     writer.Close()
     
-    # Create plugin info file.
+    # Create plugin info file. Empty for now.
     pluginInfoFilename = Path.Combine( GetDeadlineTempPath(), "pdplayer_plugin_info.job" )
     writer = StreamWriter( pluginInfoFilename, False, Encoding.Unicode )
-    
-    if(not scriptDialog.GetValue("SubmitSceneBox")):
-        writer.WriteLine("ScriptFile=" + sceneFile)
-        
     writer.Close()
     
     # Setup the command line arguments.
