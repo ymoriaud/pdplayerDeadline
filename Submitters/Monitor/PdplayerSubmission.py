@@ -31,7 +31,7 @@ def __main__( *args ):
     tabWidth = dialogWidth - 16
     
     scriptDialog = DeadlineScriptDialog()
-    scriptDialog.SetTitle( "Submit Pdplayer Job To Deadline" )
+    scriptDialog.SetTitle( "Submit Pdplayer Viewer Job To Deadline" )
     scriptDialog.SetIcon( Path.Combine( RepositoryUtils.GetRootDirectory(), "plugins/Pdplayer/Pdplayer.ico" ) )
     
     scriptDialog.AddGrid()
@@ -102,7 +102,7 @@ def __main__( *args ):
     scriptDialog.ShowDialog( False )
     
 def GetSettingsFilename():
-    return Path.Combine( GetDeadlineSettingsPath(), "PythonSettings.ini" )
+    return Path.Combine( GetDeadlineSettingsPath(), "PdplayerSettings.ini" )
     
 def SubmitButtonPressed(*args):
     global scriptDialog
@@ -114,19 +114,19 @@ def SubmitButtonPressed(*args):
         scriptDialog.ShowMessageBox( "The sceen {0} does not exist".format(sceneFile), "Error" )
         return
     elif (not scriptDialog.GetValue("SubmitSceneBox") and PathUtils.IsPathLocal(sceneFile)):
-        result = scriptDialog.ShowMessageBox( "The Python file %s is local. Are you sure you want to continue?" % sceneFile, "Warning", ("Yes","No") )
+        result = scriptDialog.ShowMessageBox( "The scene file %s is local. Are you sure you want to continue?" % sceneFile, "Warning", ("Yes","No") )
         if(result=="No"):
             return
     
     # Create job info file.
-    jobInfoFilename = Path.Combine( GetDeadlineTempPath(), "python_job_info.job" )
+    jobInfoFilename = Path.Combine( GetDeadlineTempPath(), "pdplayer_job_info.job" )
     #scriptDialog.ShowMessageBox(str(jobInfoFilename), "")
     try:
         writer = StreamWriter( jobInfoFilename, False, Encoding.Unicode ) #<- this is the line messing up
     except Exception, e:
         scriptDialog.ShowMessageBox("error: " + str(e) , "")
     
-    writer.WriteLine( "Plugin=Python" )
+    writer.WriteLine( "Plugin=Pdplayer" )
     writer.WriteLine( "Name=%s" % scriptDialog.GetValue( "NameBox" ) )
     writer.WriteLine( "Comment=%s" % scriptDialog.GetValue( "CommentBox" ) )
     writer.WriteLine( "Department=%s" % scriptDialog.GetValue( "DepartmentBox" ) )
@@ -151,23 +151,19 @@ def SubmitButtonPressed(*args):
     writer.Close()
     
     # Create plugin info file.
-    pluginInfoFilename = Path.Combine( GetDeadlineTempPath(), "python_plugin_info.job" )
+    pluginInfoFilename = Path.Combine( GetDeadlineTempPath(), "pdplayer_plugin_info.job" )
     writer = StreamWriter( pluginInfoFilename, False, Encoding.Unicode )
     
     if(not scriptDialog.GetValue("SubmitSceneBox")):
         writer.WriteLine("ScriptFile=" + sceneFile)
         
-    writer.WriteLine( "Arguments=%s" % scriptDialog.GetValue( "ArgsBox" ) )
-    writer.WriteLine( "Version=%s" % scriptDialog.GetValue( "VersionBox" ) )
     writer.Close()
     
     # Setup the command line arguments.
     arguments = StringCollection()
-    
     arguments.Add( jobInfoFilename )
     arguments.Add( pluginInfoFilename )
-    if scriptDialog.GetValue( "SubmitSceneBox" ):
-        arguments.Add( sceneFile )
+    arguments.Add( sceneFile )
     
     # Now submit the job.
     results = ClientUtils.ExecuteCommandAndGetOutput( arguments )
